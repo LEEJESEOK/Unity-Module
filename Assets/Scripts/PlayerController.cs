@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour
     MovementBehavior movement;
     Animator animator;
 
+    
+
     // Start is called before the first frame update
     void Start()
     {

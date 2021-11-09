@@ -42,6 +42,12 @@ public class MovementBehavior : MonoBehaviour
             gameObject.AddComponent<CharacterController>();
             characterController = GetComponent<CharacterController>();
             characterController.center = transform.GetChild(0).position;
+
+            characterController.slopeLimit = slopeLimit;
+            characterController.stepOffset = stepOffset;
+            characterController.skinWidth = skinWidth;
+            characterController.radius = radius;
+            characterController.height = height;
         }
         if (useRigidbody)
         {
@@ -79,7 +85,7 @@ public class MovementBehavior : MonoBehaviour
 
         velocity = transform.forward * dir.z * moveSpeed;
 
-        int sign = dir.z >= 0 ? 1 : -1;
+        int sign = (dir.z >= 0) ? 1 : -1;
         lookVector = new Vector3(0, dir.x * sign, 0);
     }
 
