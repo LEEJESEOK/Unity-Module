@@ -32,7 +32,7 @@ public class MovementBehavior : MonoBehaviour
     {
         if (useCharacterController ^ useRigidbody == false)
         {
-            print("[Error] Only one component can be used.");
+            print("[MovementBehavior] Error : Only one component can be used.");
             gameObject.SetActive(false);
             return;
         }
@@ -93,8 +93,6 @@ public class MovementBehavior : MonoBehaviour
     {
         if (useCharacterController == false) return;
         if (isMove == false) return;
-
-        print(isMove);
 
         characterController.SimpleMove(velocity);
 
