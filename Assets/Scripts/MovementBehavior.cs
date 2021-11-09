@@ -68,14 +68,16 @@ public class MovementBehavior : MonoBehaviour
         MoveByRigidbody();
     }
 
-    public void Move(Vector3 dir)
+    // Third Person Point of view
+    public void MoveTPS(Vector3 dir)
     {
         isMove = true;
 
         velocity = dir * moveSpeed;
 
         lookDir = Quaternion.LookRotation(dir);
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookDir, rotateSpeed * Time.deltaTime);
+
+        transform.rotation = lookDir;
     }
 
     // First Person Point of view
@@ -83,10 +85,13 @@ public class MovementBehavior : MonoBehaviour
     {
         isMove = true;
 
-        velocity = transform.forward * dir.z * moveSpeed;
+        velocity = (transform.right * dir.x + transform.forward * dir.z) * moveSpeed;
 
         int sign = (dir.z >= 0) ? 1 : -1;
         lookVector = new Vector3(0, dir.x * sign, 0);
+        lookDir = Quaternion.Euler(lookVector * rotateSpeed * Time.deltaTime);
+
+        transform.rotation *= lookDir;
     }
 
     void MoveByCharacterController()
@@ -94,12 +99,14 @@ public class MovementBehavior : MonoBehaviour
         if (useCharacterController == false) return;
         if (isMove == false) return;
 
+        // 바닥 고려, Time.deltaTime 사용하지 않음
         characterController.SimpleMove(velocity);
+        // Vector의 y축 입력에 따라 높이가 변동됨 바닥을 고려하지 않음
+        // characterController.Move(velocity * Time.deltaTime);
 
-        transform.rotation *= lookDir;
 
         velocity = Vector3.zero;
-        lookVector = Vector3.zero;
+        lookDir = Quaternion.identity;
 
         isMove = false;
     }
@@ -111,11 +118,10 @@ public class MovementBehavior : MonoBehaviour
 
         rigidbody.MovePosition(rigidbody.position + velocity * Time.deltaTime);
 
-        lookDir = Quaternion.Euler(lookVector * rotateSpeed * Time.deltaTime);
         rigidbody.MoveRotation(rigidbody.rotation * lookDir);
 
         velocity = Vector3.zero;
-        lookVector = Vector3.zero;
+        lookDir = Quaternion.identity;
 
         isMove = false;
     }

@@ -31,7 +31,6 @@ public class PlayerController : MonoBehaviour
         if (moveVector.magnitude == 0)
             return;
 
-        // movement.Move(moveVector);
         movement.MoveFPS(moveVector);
     }
 }
